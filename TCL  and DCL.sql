@@ -1,0 +1,72 @@
+CREATE DATABASE employee_db;
+USE employee_db;
+
+CREATE TABLE employee(
+  EmpId INT PRIMARY KEY,
+  EmpName VARCHAR(50),
+  Department VARCHAR(50),
+  Salary DECIMAL(10,2)
+  );
+  
+  INSERT INTO employee VALUES
+  (101,'Rahul','IT',45000), 
+  (102,'Priya','HR',52000),
+  (103,'Amit','Finance',60000),
+  (104,'Sneha','IT',48000),
+  (105,'John','HR',55000);
+
+START TRANSACTION;
+UPDATE EMPLOYEE SET Salary = Salary *1.10;
+COMMIT;
+
+
+START TRANSACTION;
+UPDATE EMPLOYEE SET Salary = Salary + 3000 WHERE EmpName ='Rahul';
+SAVEPOINT Sp1;
+UPDATE EMPLOYEE SET Salary = Salary + 5000 WHERE EmpName ='Priya';
+ROLLBACK  TO Sp1;
+
+
+START TRANSACTION;
+DELETE  FROM EMPLOYEE WHERE Department ='Finance';
+COMMIT;
+ROLLBACK;
+SELECT COUNT(*) FROM employee WHERE Department='HR';
+
+SET SQL_SAFE_UPDATES =0;
+
+CREATE USER 'student1'IDENTIFIED BY 'stu123';
+GRANT SELECT ON employee_db.employee TO 'student1';
+
+START TRANSACTION;
+UPDATE employee set salary = salary +5000 WHERE EmpId = 101;
+SAVEPOINT A;
+UPDATE employee set salary = salary +2000 WHERE EmpId = 102;
+ROLLBACK TO A;
+COMMIT;
+
+START TRANSACTION;
+UPDATE employee set salary = salary +5000 WHERE EmpId = 101;
+ROLLBACK;
+SELECT Salary FROM Employee WHERE EmpId=101;
+COMMIT;
+
+START TRANSACTION;
+UPDATE employee set salary = salary +5000 WHERE EmpId = 101;
+COMMIT;
+ROLLBACK;
+ SELECT SALARY FROM EMPLOYEE;
+ START TRANSACTION;
+ 
+UPDATE employee set salary = salary +1000 WHERE EmpId = 101;
+SAVEPOINT A;
+UPDATE employee set salary = salary +2000 WHERE EmpId = 102;
+ROLLBACK TO A;
+COMMIT;
+
+START TRANSACTION;
+UPDATE EMPLOYEE SET Salary = Salary *1.15 WHERE Department ='IT';
+SAVEPOINT SP1;
+UPDATE EMPLOYEE SET Salary = Salary + 2000 WHERE Department ='HR';
+ROLLBACK TO SAVEPOINT Sp1;
+COMMIT;
