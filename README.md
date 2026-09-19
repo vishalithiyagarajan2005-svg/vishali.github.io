@@ -36,7 +36,7 @@ databases and tables.
 - Joins
 - Aggregations
 - Subqueries
-- Window Functions
+- SQL Functions
 - Filtering
 - Sorting
 - Grouping
